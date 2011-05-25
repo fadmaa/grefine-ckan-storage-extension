@@ -1,0 +1,9 @@
+.ckan-package-details-table{
+	margin-bottom: 1em;
+}
+
+.ckan-storage-note{
+	border: solid 1px #ccc;
+	margin:0.5em;
+	padding:.2em;
+}
