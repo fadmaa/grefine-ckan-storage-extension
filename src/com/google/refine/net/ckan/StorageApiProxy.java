@@ -80,7 +80,7 @@ public class StorageApiProxy {
 		}
 	}
 	
-	private static final String CKAN_STORAGE_BASE_URI = "http://test.ckan.net/api/storage";
-	private static final String CKAN_STORAGE_FILES_BASE_URI = "http://test.ckan.net/storage/f/";
+	private static final String CKAN_STORAGE_BASE_URI = "http://ckan.net/api/storage";
+	private static final String CKAN_STORAGE_FILES_BASE_URI = "http://ckan.net/storage/f/";
 	
 }

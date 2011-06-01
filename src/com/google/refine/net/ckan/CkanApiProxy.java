@@ -3,7 +3,9 @@ package com.google.refine.net.ckan;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -143,15 +145,27 @@ public class CkanApiProxy {
 		if(format.equals("application/x-unknown")){
 			format = "text/csv";
 		}
-		String description = format + " representation of " + packageId + " created using Google Refine and CKAN storage extension";
+		String description = translate(format) + " (from Google Refine)";
 		return new Resource(format, description, url);
 	}
 	
 	private JSONObject getNewPackageInJson(String packageId) throws JSONException {
 		JSONObject obj = new JSONObject();
 		obj.put("name", packageId);
-		obj.put("description", "This package was created by Google Refine extension.");
+		obj.put("notes", "This package was created using Google Refine extension.");
 		
 		return obj;
+	}
+	
+	//provide a more friendly label for formate e.g. text/csv ==> CSV table
+	private String translate(String format){
+		return formatLabels.get(format);
+	}
+	
+	private static final Map<String, String> formatLabels = new HashMap<String, String>();
+	static{
+		formatLabels.put("text/csv", "CSV table");
+		formatLabels.put("application/json", "Operation history");
+		formatLabels.put("text/turtle", "RDF data");
 	}
 }

@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONWriter;
 
 import com.google.refine.Jsonizable;
+import com.google.refine.ProjectManager;
 import com.google.refine.browsing.Engine;
 import com.google.refine.commands.Command;
 import com.google.refine.exporters.Exporter;
@@ -31,6 +32,8 @@ public class UploadToCKANCommand extends Command{
 		String ckanApiBase = request.getParameter("ckan_base_api");
 		final String packageId = request.getParameter("package_id");
 		boolean createNewIfNonExisitng = request.getParameter("create_new")!=null && request.getParameter("create_new").toLowerCase().equals("true");
+		boolean rememberApiKey = request.getParameter("remember_api_key")!=null && request.getParameter("remember_api_key").toLowerCase().equals("true");
+		
 		//get (comma-separated list of ) formats required to be uploaded
 		String files = request.getParameter("files");
 		
@@ -40,6 +43,11 @@ public class UploadToCKANCommand extends Command{
 			}
 			if(packageId==null || packageId.isEmpty()){
 				throw new RuntimeException("Some required parameters are missing: package ID");
+			}
+			if(rememberApiKey){
+				saveApiKey(apikey);
+			}else{
+				forgetApiKey();
 			}
 			//remove the last "/" from CKAN API base if it exists
 			ckanApiBase = ckanApiBase.trim();
@@ -90,5 +98,11 @@ public class UploadToCKANCommand extends Command{
 		}
 	}
 
+	private void saveApiKey(String key){
+		ProjectManager.singleton.getPreferenceStore().put("CKAN.api_key", key);
+	}
 	
+	private void forgetApiKey(){
+		ProjectManager.singleton.getPreferenceStore().put("CKAN.api_key", "");
+	}
 }

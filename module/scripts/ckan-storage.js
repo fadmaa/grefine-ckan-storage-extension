@@ -1,5 +1,5 @@
 function CkanStorage(){
-	this._ckan_base_uri_packages = 'http://test.ckan.net/api/rest/package/';  		
+	this._ckan_base_uri_packages = 'http://ckan.net/api/rest/package/';  		
 };
 
 CkanStorage.prototype.showDialog = function(){
@@ -36,7 +36,7 @@ CkanStorage.prototype._footer = function(footer){
 	$('<button></button>').addClass('button').text('Upload')
 		.click(function(){
 			self._apikey = '';
-			self._getApiDetails(function(package_id,create_new){
+			self._getApiDetails(function(package_id,create_new,remember_api_key){
 				if(self._apikey){
 					//get the files selected
 					var files = self._elmts.ckan_storage_selection.find('input[type="checkbox"]:checked');
@@ -49,8 +49,8 @@ CkanStorage.prototype._footer = function(footer){
 						return;
 					}
 					//request upload command
-					var dismissBusy = DialogSystem.showBusy();
-					$.post("/command/ckan-storage-extension/upload-to-ckan",{"project":theProject.id,"apikey":self._apikey,"files":files_str,"package_id":package_id,"ckan_base_api":self._ckan_base_uri_packages,"create_new":create_new},
+					var dismissBusy = DialogSystem.showBusy("Uploading to CKAN...");
+					$.post("/command/ckan-storage-extension/upload-to-ckan",{"remember_api_key":remember_api_key,"project":theProject.id,"apikey":self._apikey,"files":files_str,"package_id":package_id,"ckan_base_api":self._ckan_base_uri_packages,"create_new":create_new},
 							function(data){
 								dismissBusy();
 								if(data.code!=='ok'){
@@ -146,13 +146,18 @@ CkanStorage.prototype._getApiDetails = function(onDone){
 			      '<td>' +
 			        '<table class="ckan-package-details-table">' +
 			          '<tr><td><input type="text" bind="package_id" /></td></tr>' +
-			          '<tr><td><input checked="true" type="checkbox" bind="create_if_non_exist" /> Create the package if it doesn\'t exist</td></tr>' + 
+			          '<tr><td><input checked="checked" type="checkbox" bind="create_if_non_exist" /> Create the package if it doesn\'t exist</td></tr>' + 
 			        '</table>' + 
 			      '</td>' +
 			    '</tr>' +
 			    '<tr>' +
 			      '<td>CKAN API key:</td>' + 
-			      '<td><input type="password" bind="api_key" /></td>' +
+			      '<td>' +
+			        '<table class="ckan-package-details-table">' +
+			          '<tr><td><input type="password" bind="api_key" /></td></tr>' +
+			          '<tr><td><input type="checkbox" bind="remember_api_key" />Remember API key</td></tr>' +
+			        '</table>' + 
+			      '</td>' +
 			    '</tr>' +
 			  '</table>'
 			); 
@@ -160,8 +165,23 @@ CkanStorage.prototype._getApiDetails = function(onDone){
 	var body = $('<div></div>').addClass("dialog-body").appendTo(frame).append(html);
 	var footer = $('<div></div>').addClass("dialog-footer").appendTo(frame);
 
-	var level = DialogSystem.showDialog(frame);
 	var elmts = DOM.bind(html);
+	//try to get the API Key if saved
+	$.ajax({
+        async: false,
+        url: "/command/core/get-preference?" + $.param({ 
+            name: "CKAN.api_key" 
+        }),
+        success: function(data) {
+            if (data.value && data.value != "null") {
+            	elmts.api_key.val(data.value);
+        		elmts.remember_api_key.attr('checked','checked');
+            } 
+        },
+        dataType: "json"
+    });
+	var level = DialogSystem.showDialog(frame);
+	
 	elmts.ckan_base_uri.text(self._ckan_base_uri_packages);
 	
 	elmts.change_ckan_base_uri.click(function(e){
@@ -198,7 +218,7 @@ CkanStorage.prototype._getApiDetails = function(onDone){
 				return;
 			}
 			if(onDone){
-				onDone(package_id,elmts.create_if_non_exist.attr('checked'));
+				onDone(package_id,elmts.create_if_non_exist.attr('checked'),elmts.remember_api_key.attr('checked'));
 			}
 		}).appendTo(footer);
 	$('<button></button>').addClass('button').html('Cancel')
