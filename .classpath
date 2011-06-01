@@ -9,6 +9,6 @@
 	<classpathentry kind="lib" path="/grefine/webapp/WEB-INF/lib/httpclient-4.0.1.jar"/>
 	<classpathentry kind="lib" path="/grefine/webapp/WEB-INF/lib/commons-codec-1.4.jar"/>
 	<classpathentry kind="lib" path="/grefine/tests/server/lib/testng-5.12.1.jar"/>
-	<classpathentry kind="lib" path="C:/development/Java/grifine/grefine/extensions/ckan-storage/module/MOD-INF/lib/httpmime-4.1.1.jar"/>
+	<classpathentry kind="lib" path="module/MOD-INF/lib/httpmime-4.1.1.jar"/>
 	<classpathentry kind="output" path="module/MOD-INF/classes"/>
 </classpath>
