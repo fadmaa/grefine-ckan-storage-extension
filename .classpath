@@ -10,9 +10,9 @@
 	<classpathentry kind="lib" path="/grefine/webapp/WEB-INF/lib/commons-codec-1.4.jar"/>
 	<classpathentry kind="lib" path="/grefine/tests/server/lib/testng-5.12.1.jar"/>
 	<classpathentry kind="lib" path="module/MOD-INF/lib/httpmime-4.1.1.jar"/>
-	<classpathentry kind="lib" path="C:/development/Java/grifine/grefine/extensions/ckan-storage/module/MOD-INF/lib/fadmaa-ngram-arq-2.8.5.jar"/>
-	<classpathentry kind="lib" path="C:/development/Java/grifine/grefine/extensions/ckan-storage/module/MOD-INF/lib/iri-0.8.jar"/>
-	<classpathentry kind="lib" path="C:/development/Java/grifine/grefine/extensions/ckan-storage/module/MOD-INF/lib/jena-2.6.3.jar"/>
-	<classpathentry kind="lib" path="C:/development/Java/grifine/grefine/extensions/ckan-storage/module/MOD-INF/lib/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="lib" path="module/MOD-INF/lib/fadmaa-ngram-arq-2.8.5.jar"/>
+	<classpathentry kind="lib" path="module/MOD-INF/lib/iri-0.8.jar"/>
+	<classpathentry kind="lib" path="module/MOD-INF/lib/jena-2.6.3.jar"/>
+	<classpathentry kind="lib" path="module/MOD-INF/lib/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="output" path="module/MOD-INF/classes"/>
 </classpath>
