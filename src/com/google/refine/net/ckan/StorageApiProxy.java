@@ -2,13 +2,16 @@ package com.google.refine.net.ckan;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
@@ -40,7 +43,7 @@ public class StorageApiProxy {
 				String uploadFileUrl = obj.getString("action");
 				HttpPost postFile = new HttpPost(uploadFileUrl);
 				postFile.setHeader("Authorization", apikey);
-				MultipartEntity mpEntity = new MultipartEntity();
+				MultipartEntity mpEntity = new MultipartEntity(HttpMultipartMode.STRICT);
 			
 				JSONArray fields = obj.getJSONArray("fields");
 				for(int i=0;i<fields.length();i++){
@@ -50,7 +53,7 @@ public class StorageApiProxy {
 					if(fieldName.equals("key")){
 						filekey = fieldValue;
 					}
-					mpEntity.addPart(fieldName, new StringBody(fieldValue));
+					mpEntity.addPart(fieldName, new StringBody(fieldValue,"multipart/form-data",Charset.forName("UTF-8")));
 				}
 			
 				//	assure that we got the file key
@@ -59,7 +62,8 @@ public class StorageApiProxy {
 				}
 			
 				//the file should be the last part
-				mpEntity.addPart("file", new StringBody(fileContent));
+				//hack... StringBody didn't work with large files
+				mpEntity.addPart("file", new ByteArrayBody(fileContent.getBytes(Charset.forName("UTF-8")),"multipart/form-data",fileLabel));
 
 				postFile.setEntity(mpEntity);
 			
@@ -82,5 +86,5 @@ public class StorageApiProxy {
 	
 	private static final String CKAN_STORAGE_BASE_URI = "http://ckan.net/api/storage";
 	private static final String CKAN_STORAGE_FILES_BASE_URI = "http://ckan.net/storage/f/";
-	
+
 }

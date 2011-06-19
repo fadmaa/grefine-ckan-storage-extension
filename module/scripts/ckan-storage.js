@@ -23,7 +23,12 @@ CkanStorage.prototype._renderBody = function(body){
 				  '<span>Select files that will be uploaded to CKAN:</span>' + 
 				  '<table>' +
 				      '<tr><td><input value="csv" type="checkbox" checked="checked" /></td><td>Cleaned data as CSV</td></tr>' +
-				      (theProject.overlayModels.rdfSchema?('<tr><td><input value="Turtle" type="checkbox" checked="checked" /></td><td>RDF data (written in Turtle)</td></tr>' ):'') + 
+				      (theProject.overlayModels.rdfSchema?
+				    		  (
+				    				  '<tr><td><input value="Turtle" type="checkbox" checked="checked" /></td><td>RDF data (written in Turtle)</td></tr>' + 
+				    				  '<tr><td><input value="add_provenance_info" type="checkbox" checked="checked" /></td><td>Provenance description of the RDF data</td></tr>'
+				    		  )
+				    		  :'') + 
 				      '<tr><td><input value="history-json" type="checkbox" checked="checked" /></td><td>Google Refine operations history (as JSON data)</td></tr>' + 
 				  '</table>' +
 				'</div>'

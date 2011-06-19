@@ -3,6 +3,8 @@ package com.google.refine.net.ckan;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -26,6 +28,8 @@ import com.google.refine.exporters.StreamExporter;
 import com.google.refine.exporters.WriterExporter;
 import com.google.refine.model.Project;
 import com.google.refine.net.ckan.model.Resource;
+import com.google.refine.net.ckan.rdf.ProvenanceFactory;
+import com.hp.hpl.jena.rdf.model.Model;
 
 public class CkanApiProxy {
 
@@ -98,7 +102,9 @@ public class CkanApiProxy {
 	}
 	
 	//return the URL of the package
-	public String addGroupOfResources(String ckanBaseUri, String packageId, Set<Exporter> exporters, Project project, Engine engine, String apikey, boolean createNewIfNonExisitng) throws IOException, JSONException {
+	public String addGroupOfResources(String ckanBaseUri, String packageId, Set<Exporter> exporters, Project project, 
+			Engine engine, ProvenanceFactory provFactory, String apikey, boolean createNewIfNonExisitng, boolean provenanceRequired) throws IOException, JSONException {
+		Map<String,String> resourceFormatsUrlsMap = new HashMap<String, String>();
 		String packageUrl = ckanBaseUri + "/" + packageId;
 		Set<Resource> resources = new HashSet<Resource>();
 		if(! exists(packageUrl)){
@@ -128,7 +134,16 @@ public class CkanApiProxy {
 				throw new RuntimeException("Unknown exporter type");
 			}
 			//collect the added resource
+			resourceFormatsUrlsMap.put(exporter.getContentType(),url);
 			resources.add(getCkanResource(exporter.getContentType(), url, packageId));
+		}
+		//if provenance is required
+		if(provenanceRequired){
+			//make sure that all the required files are provided
+			if(resourceFormatsUrlsMap.containsKey("application/x-unknown") && resourceFormatsUrlsMap.containsKey("text/turtle") && resourceFormatsUrlsMap.containsKey("application/json")){
+				String provFileLabel = "provenance-" + seed; 
+				resources.add(getProvenance(resourceFormatsUrlsMap,storage, provFactory , provFileLabel, apikey));
+			}
 		}
 		//register resources
 		String ckan_url = this.registerPackageResources(packageUrl, resources, apikey);
@@ -136,6 +151,22 @@ public class CkanApiProxy {
 		return ckan_url;
 	}
 	
+	private Resource getProvenance(Map<String, String> resourceFormatsUrlsMap, StorageApiProxy storage, ProvenanceFactory provFactory, String provFileLabel, String apikey) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		//build the RDF
+		Model model = provFactory.getProvenance(resourceFormatsUrlsMap.get("application/x-unknown"), resourceFormatsUrlsMap.get("text/turtle"), 
+				resourceFormatsUrlsMap.get("application/json"),calendar);
+		//upload the RDF data to CKAN Storage
+		StringWriter sw = new StringWriter();
+		model.write(sw, null, "TURTLE");
+		sw.flush();
+		String url = storage.uploadFile(sw.toString(), provFileLabel, apikey);
+		//build and return a representing resource
+		String description = "RDF provenance description (from Google Refine)";
+		return new Resource("text/turtle", description, url);
+	}
+
 	private String getRandomString(long id) {
 		return String.valueOf(id) + "-" + System.currentTimeMillis();
 	}

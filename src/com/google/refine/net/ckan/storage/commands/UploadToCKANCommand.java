@@ -22,6 +22,7 @@ import com.google.refine.exporters.ExporterRegistry;
 import com.google.refine.model.Project;
 import com.google.refine.net.ckan.CkanApiProxy;
 import com.google.refine.net.ckan.exporter.HistoryJsonExporter;
+import com.google.refine.net.ckan.rdf.ProvenanceFactory;
 
 public class UploadToCKANCommand extends Command{
 
@@ -31,8 +32,9 @@ public class UploadToCKANCommand extends Command{
 		String apikey = request.getParameter("apikey");
 		String ckanApiBase = request.getParameter("ckan_base_api");
 		final String packageId = request.getParameter("package_id");
-		boolean createNewIfNonExisitng = request.getParameter("create_new")!=null && request.getParameter("create_new").toLowerCase().equals("true");
-		boolean rememberApiKey = request.getParameter("remember_api_key")!=null && request.getParameter("remember_api_key").toLowerCase().equals("true");
+		boolean createNewIfNonExisitng = getBoolean(request,"create_new");
+		boolean addProvenanceInfo = false;
+		boolean rememberApiKey = getBoolean(request,"remember_api_key");
 		
 		//get (comma-separated list of ) formats required to be uploaded
 		String files = request.getParameter("files");
@@ -65,6 +67,11 @@ public class UploadToCKANCommand extends Command{
 				Exporter exporter = ExporterRegistry.getExporter(format);
 				
 				if(exporter==null){
+					//handle the specialcase of provenance
+					if(format.equals("add_provenance_info")){
+						addProvenanceInfo = true;
+						continue;
+					}
 					//either JSON representation of the history or something went wrong
 					if(format.equals("history-json")){
 						exporter = new HistoryJsonExporter();
@@ -77,7 +84,8 @@ public class UploadToCKANCommand extends Command{
 				exporters.add(exporter);
 			}
 			
-			final String packageUrl = ckanApiClient.addGroupOfResources(ckanApiBase , packageId, exporters, project, engine, apikey, createNewIfNonExisitng);
+			final String packageUrl = ckanApiClient.addGroupOfResources(ckanApiBase , packageId, exporters, project, engine, 
+					new ProvenanceFactory(), apikey, createNewIfNonExisitng, addProvenanceInfo);
 			respondJSON(response, new Jsonizable() {
 				
 				@Override
@@ -104,5 +112,9 @@ public class UploadToCKANCommand extends Command{
 	
 	private void forgetApiKey(){
 		ProjectManager.singleton.getPreferenceStore().put("CKAN.api_key", "");
+	}
+	
+	private boolean getBoolean(HttpServletRequest request, String paramName){
+		return request.getParameter(paramName)!=null && request.getParameter(paramName).toLowerCase().equals("true");
 	}
 }
