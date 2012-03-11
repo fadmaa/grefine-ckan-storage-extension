@@ -1,5 +1,5 @@
 function CkanStorage(){
-	this._ckan_base_uri_packages = 'http://ckan.net/api/rest/package/';  		
+	this._ckan_base_uri_packages = 'http://thedatahub.org/api/rest/package/';  		
 };
 
 CkanStorage.prototype.showDialog = function(){
@@ -112,7 +112,7 @@ CkanStorage.prototype._changeBaseUri = function(onDone) {
 			'<div>' +
 			  'Enter the URI for interacting with packages. This should support CKAN API as described at ' +
 			  '<a href="http://packages.python.org/ckan/api/version2.html">http://packages.python.org/ckan/api/version2.html</a>:' + 
-			  '<br/><input type="text" value="http://ckan.net/api/rest/package/" bind="new_ckan_base_uri" size="34"/>' +
+			  '<br/><input type="text" value="http://thedatahub.org/api/rest/package/" bind="new_ckan_base_uri" size="34"/>' +
 			'</div>'
 		);
 	var body = $('<div></div>').addClass("dialog-body").appendTo(frame).append(html);
