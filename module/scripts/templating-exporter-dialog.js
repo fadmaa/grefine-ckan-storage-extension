@@ -128,7 +128,7 @@ DataHubTemplatingExporterDialog.prototype._getPackageName = function(){
 						alert("package has no existing resources in webstore");
 					}
 				}else{
-					alert("package " + package_id + " does not exist.");
+					alert("package " + package_id + "  does not exist.");
 				}
 				
 			},"json");
