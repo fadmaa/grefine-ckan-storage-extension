@@ -241,11 +241,16 @@ $(function(){
 				"submenu" : [
 				             {
 				            	 "id":"ckan-storage-upload",
-				            	 label:"Upload to CKAN Storage...",
+				            	 label:"Upload to the Data Hub Storage...",
 				            	 click:function(){
 				            		 var ckan_storage = new CkanStorage();
 				            		 ckan_storage.showDialog();
 				            	 }
+				             },
+				             {
+				            	 "id":"ckan-storage-upload",
+				            	 label:"Save to the Data Hub data store...",
+				            	 "click": function() { new DataHubTemplatingExporterDialog(); }
 				             }
 				           ] 
 			});

@@ -85,6 +85,19 @@ public class CkanApiProxy {
 		return response.getStatusLine().getStatusCode() == 200;
 	}
 	
+	public JSONObject getPackage(String packageUrl) throws ClientProtocolException, IOException, JSONException{
+		HttpClient client = new DefaultHttpClient();
+		//head request does not work! 
+		HttpGet get = new HttpGet(packageUrl);
+		HttpResponse response = client.execute(get);
+		if (response.getStatusLine().getStatusCode() != 200){
+			return null;
+		}
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		response.getEntity().writeTo(os);
+		return new JSONObject(os.toString());
+	}
+	
 	public void registerNewPackage(String packageId, String ckanBaseUri, String apikey) throws ClientProtocolException, IOException, JSONException{
 		HttpClient client = new DefaultHttpClient();
 		//head request does not work! 
