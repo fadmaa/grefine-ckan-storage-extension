@@ -1,5 +1,5 @@
 function CkanStorage(){
-	this._ckan_base_uri_packages = 'http://thedatahub.org/api/rest/package/';  		
+	this._ckan_base_uri_packages = 'http://datahub.io/api/rest/package/';  		
 };
 
 CkanStorage.prototype.showDialog = function(){
@@ -223,7 +223,7 @@ CkanStorage.prototype._getApiDetails = function(onDone){
 				return;
 			}
 			if(onDone){
-				onDone(package_id,elmts.create_if_non_exist.attr('checked'),elmts.remember_api_key.attr('checked'));
+				onDone(package_id,elmts.create_if_non_exist.attr('checked')=='checked',elmts.remember_api_key.attr('checked')=='checked');
 			}
 		}).appendTo(footer);
 	$('<button></button>').addClass('button').html('Cancel')
@@ -246,11 +246,6 @@ $(function(){
 				            		 var ckan_storage = new CkanStorage();
 				            		 ckan_storage.showDialog();
 				            	 }
-				             },
-				             {
-				            	 "id":"ckan-storage-upload",
-				            	 label:"Save to the Data Hub data store...",
-				            	 "click": function() { new DataHubTemplatingExporterDialog(); }
 				             }
 				           ] 
 			});
