@@ -1,4 +1,4 @@
-package com.google.refine.net.ckan.storage.commands;
+package org.deri.orefine.ckan.commands;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -10,6 +10,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.deri.orefine.ckan.CkanApiProxy;
+import org.deri.orefine.ckan.exporter.HistoryJsonExporter;
+import org.deri.orefine.ckan.rdf.ProvenanceFactory;
 import org.json.JSONException;
 import org.json.JSONWriter;
 
@@ -20,9 +23,6 @@ import com.google.refine.commands.Command;
 import com.google.refine.exporters.Exporter;
 import com.google.refine.exporters.ExporterRegistry;
 import com.google.refine.model.Project;
-import com.google.refine.net.ckan.CkanApiProxy;
-import com.google.refine.net.ckan.exporter.HistoryJsonExporter;
-import com.google.refine.net.ckan.rdf.ProvenanceFactory;
 
 public class UploadToCKANCommand extends Command{
 

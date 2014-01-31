@@ -1,4 +1,4 @@
-package com.google.refine.net.ckan.model;
+package org.deri.orefine.ckan.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;

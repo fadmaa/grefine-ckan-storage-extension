@@ -1,4 +1,4 @@
-package com.google.refine.net.ckan.rdf;
+package org.deri.orefine.ckan.rdf;
 
 import java.util.Calendar;
 

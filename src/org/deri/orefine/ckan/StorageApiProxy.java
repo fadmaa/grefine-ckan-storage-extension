@@ -1,4 +1,4 @@
-package com.google.refine.net.ckan;
+package org.deri.orefine.ckan;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -84,7 +84,7 @@ public class StorageApiProxy {
 		}
 	}
 	
-	private static final String CKAN_STORAGE_BASE_URI = "http://ckan.net/api/storage";
-	private static final String CKAN_STORAGE_FILES_BASE_URI = "http://ckan.net/storage/f/";
+	private static final String CKAN_STORAGE_BASE_URI = "http://datahub.io/api/storage";
+	private static final String CKAN_STORAGE_FILES_BASE_URI = "http://datahub.io/storage/f/";
 
 }

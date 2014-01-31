@@ -1,4 +1,4 @@
-package com.google.refine.net.ckan;
+package org.deri.orefine.ckan;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,6 +18,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.deri.orefine.ckan.model.Resource;
+import org.deri.orefine.ckan.rdf.ProvenanceFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,8 +29,6 @@ import com.google.refine.exporters.Exporter;
 import com.google.refine.exporters.StreamExporter;
 import com.google.refine.exporters.WriterExporter;
 import com.google.refine.model.Project;
-import com.google.refine.net.ckan.model.Resource;
-import com.google.refine.net.ckan.rdf.ProvenanceFactory;
 import com.hp.hpl.jena.rdf.model.Model;
 
 public class CkanApiProxy {
@@ -58,6 +58,7 @@ public class CkanApiProxy {
 		
 		HttpPost post = new HttpPost(packageUrl);
 		post.setHeader("Authorization", apiKey);
+		post.setHeader("X-CKAN-API-Key", apiKey);
 		StringEntity entity = new StringEntity(obj.toString(),"UTF-8");
 		post.setHeader("Content-type","application/x-www-form-urlencoded");
 		post.setEntity(entity);

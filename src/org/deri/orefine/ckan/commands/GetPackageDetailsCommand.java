@@ -1,4 +1,4 @@
-package com.google.refine.net.ckan.storage.commands;
+package org.deri.orefine.ckan.commands;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -7,12 +7,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.deri.orefine.ckan.CkanApiProxy;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONWriter;
 
 import com.google.refine.commands.Command;
-import com.google.refine.net.ckan.CkanApiProxy;
 
 public class GetPackageDetailsCommand extends Command{
 

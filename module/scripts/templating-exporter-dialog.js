@@ -35,7 +35,7 @@ function DataHubTemplatingExporterDialog() {
     this._timerID = null;
     this._createDialog();
     this._updatePreview();
-    this._ckan_base_uri_packages = 'http://thedatahub.org/api/rest/package/';
+    this._ckan_base_uri_packages = 'http://datahub.org/api/rest/package/';
 }
 
 DataHubTemplatingExporterDialog.prototype._createDialog = function() {

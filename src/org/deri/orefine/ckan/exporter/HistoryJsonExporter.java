@@ -1,4 +1,4 @@
-package com.google.refine.net.ckan.exporter;
+package org.deri.orefine.ckan.exporter;
 
 import java.io.IOException;
 import java.io.Writer;

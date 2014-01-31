@@ -1,8 +1,8 @@
 function init() {
   var GRefineServlet = Packages.com.google.refine.RefineServlet;
   
-  GRefineServlet.registerCommand(module, "upload-to-ckan", new com.google.refine.net.ckan.storage.commands.UploadToCKANCommand());
-  GRefineServlet.registerCommand(module, "get-package-details", new com.google.refine.net.ckan.storage.commands.GetPackageDetailsCommand());
+  GRefineServlet.registerCommand(module, "upload-to-ckan", new org.deri.orefine.ckan.commands.UploadToCKANCommand());
+  GRefineServlet.registerCommand(module, "get-package-details", new org.deri.orefine.ckan.commands.GetPackageDetailsCommand());
   
   
   var ClientSideResourceManager = Packages.com.google.refine.ClientSideResourceManager;
